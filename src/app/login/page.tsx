@@ -8,7 +8,7 @@ import { useStore } from "@/store/useStore";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { setAuth } = useStore();
+  const { setRole } = useStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,7 +21,7 @@ export default function LoginPage() {
     });
     const data = await res.json();
     if (!res.ok) return toast.error(data.message || "Login failed");
-    setAuth(data.token, data.role);
+    setRole(data.role);
     toast.success("Welcome back");
     router.push("/");
   };

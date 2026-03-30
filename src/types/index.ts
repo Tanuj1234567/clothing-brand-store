@@ -17,3 +17,11 @@ export type CartItem = {
   quantity: number;
   size: string;
 };
+
+export type Review = {
+  _id: string;
+  userName: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+};

@@ -11,7 +11,7 @@ declare global {
 }
 
 export default function CheckoutPage() {
-  const { cart, clearCart, token } = useStore();
+  const { cart, clearCart } = useStore();
   const [form, setForm] = useState({ fullName: "", phone: "", line1: "", city: "", state: "", pincode: "" });
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -37,11 +37,24 @@ export default function CheckoutPage() {
         name: "NOIRVAULT",
         description: "Order Payment",
         order_id: orderData.order.id,
-        handler: async () => {
-          const orderPayload = { items: cart, total, address: form };
+        handler: async (paymentResponse: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
+          const verifyRes = await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(paymentResponse)
+          });
+          if (!verifyRes.ok) throw new Error("Payment signature invalid");
+
+          const orderPayload = {
+            items: cart,
+            total,
+            address: form,
+            razorpayOrderId: paymentResponse.razorpay_order_id,
+            razorpayPaymentId: paymentResponse.razorpay_payment_id
+          };
           const createOrder = await fetch("/api/orders", {
             method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(orderPayload)
           });
           if (!createOrder.ok) throw new Error("Failed to place order");

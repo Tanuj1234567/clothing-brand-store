@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
-import { verifyToken } from "@/lib/jwt";
+import { getAuthUser } from "@/lib/auth";
 import { Order } from "@/models/Order";
+import { createOrderSchema } from "@/lib/validation";
 
 export async function GET(req: Request) {
   try {
-    const token = req.headers.get("authorization")?.split(" ")[1];
-    if (!token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    const user = verifyToken(token);
+    const user = await getAuthUser();
+    if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     await connectDB();
     const filter = user.role === "admin" ? {} : { userId: user.userId };
@@ -20,15 +20,15 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const token = req.headers.get("authorization")?.split(" ")[1];
-    if (!token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    const user = verifyToken(token);
+    const user = await getAuthUser();
+    if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-    const body = await req.json();
+    const body = createOrderSchema.parse(await req.json());
     await connectDB();
     const order = await Order.create({ ...body, userId: user.userId, paymentStatus: "paid" });
     return NextResponse.json({ order });
-  } catch {
-    return NextResponse.json({ message: "Error creating order" }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Error creating order";
+    return NextResponse.json({ message }, { status: 400 });
   }
 }

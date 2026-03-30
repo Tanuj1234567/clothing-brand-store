@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { useStore } from "@/store/useStore";
 
 export default function AdminPage() {
-  const { token, role } = useStore();
+  const { role } = useStore();
   const [products, setProducts] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [newProduct, setNewProduct] = useState({ name: "", price: 0, category: "Streetwear", sizes: "S,M,L", images: "", description: "" });
@@ -13,9 +13,18 @@ export default function AdminPage() {
   const load = useCallback(async () => {
     const p = await fetch("/api/products").then((r) => r.json());
     setProducts(p.products || []);
-    const o = await fetch("/api/orders", { headers: { Authorization: `Bearer ${token}` } }).then((r) => r.json());
+    const o = await fetch("/api/orders").then((r) => r.json());
     setOrders(o.orders || []);
-  }, [token]);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!data?.authenticated) toast.error("Please login as admin");
+      })
+      .catch(() => undefined);
+  }, []);
 
   useEffect(() => {
     if (role === "admin") load();
@@ -48,7 +57,7 @@ export default function AdminPage() {
             };
             const res = await fetch("/api/products", {
               method: "POST",
-              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify(payload)
             });
             if (res.ok) {
@@ -77,7 +86,7 @@ export default function AdminPage() {
                     if (!name) return;
                     await fetch(`/api/products/${p._id}`, {
                       method: "PUT",
-                      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                      headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({ ...p, name })
                     });
                     toast.success("Updated");
@@ -89,7 +98,7 @@ export default function AdminPage() {
                 <button
                   className="text-red-500"
                   onClick={async () => {
-                    await fetch(`/api/products/${p._id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+                    await fetch(`/api/products/${p._id}`, { method: "DELETE" });
                     toast.success("Deleted");
                     load();
                   }}

@@ -1,13 +1,13 @@
 # NOIRVAULT - Premium E-commerce Store
 
-Modern full-stack clothing brand e-commerce app for Gen Z / young adults built with Next.js, Tailwind, MongoDB, JWT auth, and Razorpay integration.
+Modern full-stack clothing brand e-commerce app for Gen Z / young adults built with Next.js, Tailwind, MongoDB, JWT auth (HTTP-only cookie sessions), and Razorpay integration.
 
 ## Tech Stack
 
 - Frontend: Next.js (App Router), React, Tailwind CSS
 - Backend: Next.js API Routes (Node runtime)
 - Database: MongoDB + Mongoose
-- Auth: JWT (signup/login)
+- Auth: JWT + HTTP-only cookie session
 - Payment: Razorpay (India)
 - State: Zustand (cart, auth, wishlist)
 - UX: loading skeletons, toast notifications, responsive design, dark mode support
@@ -28,26 +28,29 @@ Modern full-stack clothing brand e-commerce app for Gen Z / young adults built w
 - JWT signup/login
 - Admin dashboard (add/delete products, view orders)
 - Wishlist (bonus)
-- Product reviews-ready model extension point (bonus scaffold via rating)
+- Product reviews API + UI
 - Dark mode foundation (bonus)
 - Reusable UI components + API layer
 - Dummy product seed data
 - Error handling and global error boundary
+- Zod request validation on auth/order/review endpoints
+- In-memory rate limiting for auth and payment endpoints
+- Razorpay signature verification endpoint
 
 ## Folder Structure
 
 `src/app`  
 - Page routes (`/`, `/products`, `/cart`, `/checkout`, `/login`, `/signup`, `/admin`, `/wishlist`)  
-- API routes (`/api/auth`, `/api/products`, `/api/orders`, `/api/payment/create-order`)
+- API routes (`/api/auth`, `/api/products`, `/api/orders`, `/api/payment/create-order`, `/api/payment/verify`)
 
 `src/components`  
 - Reusable UI components (`Navbar`, `Footer`, `ProductCard`, `Skeleton`, `providers`)
 
 `src/lib`  
-- Infrastructure/utilities (`db`, `jwt`, `sample-data`)
+- Infrastructure/utilities (`db`, `jwt`, `auth`, `validation`, `rate-limit`, `sample-data`)
 
 `src/models`  
-- Mongoose models (`User`, `Product`, `Order`)
+- Mongoose models (`User`, `Product`, `Order`, `Review`)
 
 `src/store`  
 - Zustand store (`useStore`)
@@ -89,9 +92,7 @@ Modern full-stack clothing brand e-commerce app for Gen Z / young adults built w
 
 ## Production Notes
 
-- Add Razorpay payment signature verification webhook for robust payment confirmation.
-- Add server-side validation layer (Zod/Joi) for all payloads.
-- Add rate limiting and request logging.
-- Move auth token to secure HTTP-only cookies for stronger security.
+- Consider replacing the in-memory rate limiter with Redis for multi-instance deployments.
+- Add request logging + monitoring (e.g., Sentry, OpenTelemetry).
 - Add image optimization pipeline / CDN.
 - Add tests (unit + integration + e2e).

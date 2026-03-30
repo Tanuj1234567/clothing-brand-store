@@ -22,6 +22,8 @@ const orderSchema = new Schema(
       state: String,
       pincode: String
     },
+    razorpayOrderId: { type: String, required: true },
+    razorpayPaymentId: { type: String, required: true },
     paymentStatus: { type: String, default: "pending" }
   },
   { timestamps: true }

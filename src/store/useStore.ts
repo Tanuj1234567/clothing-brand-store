@@ -5,11 +5,10 @@ import { persist } from "zustand/middleware";
 import type { CartItem } from "@/types";
 
 type StoreState = {
-  token: string | null;
   role: "user" | "admin" | null;
   cart: CartItem[];
   wishlist: string[];
-  setAuth: (token: string, role: "user" | "admin") => void;
+  setRole: (role: "user" | "admin" | null) => void;
   logout: () => void;
   addToCart: (item: CartItem) => void;
   updateQty: (productId: string, size: string, quantity: number) => void;
@@ -21,12 +20,11 @@ type StoreState = {
 export const useStore = create<StoreState>()(
   persist(
     (set) => ({
-      token: null,
       role: null,
       cart: [],
       wishlist: [],
-      setAuth: (token, role) => set({ token, role }),
-      logout: () => set({ token: null, role: null }),
+      setRole: (role) => set({ role }),
+      logout: () => set({ role: null }),
       addToCart: (item) =>
         set((state) => {
           const exists = state.cart.find((i) => i.productId === item.productId && i.size === item.size);
