@@ -72,23 +72,23 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="grid gap-8 md:grid-cols-2">
-      <section className="space-y-4">
-        <h1 className="text-2xl font-semibold">Shipping Address</h1>
+    <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+      <section className="card-surface space-y-4 p-6 sm:p-8">
+        <h1 className="text-2xl font-semibold tracking-tight">Shipping Address</h1>
         {Object.keys(form).map((key) => (
           <input
             key={key}
             placeholder={key}
             value={(form as any)[key]}
             onChange={(e) => setForm((prev) => ({ ...prev, [key]: e.target.value }))}
-            className="w-full rounded-xl border border-zinc-300 px-4 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="w-full rounded-xl border border-zinc-300 px-4 py-2.5 text-sm capitalize dark:border-zinc-700 dark:bg-zinc-900"
           />
         ))}
       </section>
-      <section className="h-fit rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800">
+      <section className="card-surface h-fit p-6">
         <h2 className="text-xl font-semibold">Order Summary</h2>
-        <p className="mt-2">Total: Rs. {total}</p>
-        <button onClick={pay} className="mt-4 rounded-full bg-black px-6 py-2 text-white dark:bg-brand-accent dark:text-black">
+        <p className="mt-3 text-zinc-600 dark:text-zinc-300">Total: Rs. {total}</p>
+        <button onClick={pay} className="btn-primary mt-5 w-full">
           Pay with Razorpay
         </button>
       </section>

@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="antialiased">
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
         <Providers>
           <Navbar />
-          <main className="container-max py-8">{children}</main>
+          <main className="container-max py-10 sm:py-12">{children}</main>
           <Footer />
         </Providers>
       </body>

@@ -25,13 +25,13 @@ export default function SignupPage() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto max-w-md space-y-4 rounded-2xl border border-zinc-200 p-8 dark:border-zinc-800">
-      <h1 className="text-2xl font-semibold">Create Account</h1>
-      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full Name" className="w-full rounded-xl border p-2 dark:bg-zinc-900" />
-      <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" className="w-full rounded-xl border p-2 dark:bg-zinc-900" />
-      <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" className="w-full rounded-xl border p-2 dark:bg-zinc-900" />
-      <button className="w-full rounded-full bg-black py-2 text-white dark:bg-brand-accent dark:text-black">Signup</button>
-      <p className="text-sm">Already have account? <Link href="/login" className="underline">Login</Link></p>
+    <form onSubmit={onSubmit} className="card-surface mx-auto max-w-md space-y-5 p-8 sm:p-10">
+      <h1 className="text-3xl font-semibold tracking-tight">Create Account</h1>
+      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full Name" className="w-full rounded-xl border border-zinc-300 p-3 text-sm dark:border-zinc-700 dark:bg-zinc-900" />
+      <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" className="w-full rounded-xl border border-zinc-300 p-3 text-sm dark:border-zinc-700 dark:bg-zinc-900" />
+      <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" className="w-full rounded-xl border border-zinc-300 p-3 text-sm dark:border-zinc-700 dark:bg-zinc-900" />
+      <button className="btn-primary w-full">Signup</button>
+      <p className="text-sm text-zinc-600 dark:text-zinc-400">Already have account? <Link href="/login" className="underline underline-offset-4">Login</Link></p>
     </form>
   );
 }
